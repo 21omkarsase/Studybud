@@ -31,3 +31,11 @@
 ### Applying Default Migrations
 
     python manage.py migrate
+
+### Create New Migration
+
+    python manage.py makemigrations
+
+### Create admin dashboard user
+
+    python manage.py createsuperuser

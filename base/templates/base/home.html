@@ -3,11 +3,17 @@
 <h1>Welcome Home</h1>
 
 <div>
+  <a href="{% url 'create-room' %}">Create Room</a>
+
   {% for room in rooms %}
-  <div>
-    <span>{{room.id}}</span>
+  <div style="border: 1px solid black; padding: 10px">
+    <span>@{{room.host.username}}</span>
+    <h5>
+      {{room.id}}
+      <a href="{% url 'room' room.id %}"><span>{{room.name}}</span> </a>
+    </h5>
     <!-- <a href="/room/{{room.id}}"><span>{{room.name}}</span> </a> -->
-    <a href="{% url 'room' room.id %}"><span>{{room.name}}</span> </a>
+    <span>{{room.topic.name}}</span>
   </div>
   {% endfor %}
 </div>
