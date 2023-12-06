@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 # from django.http import HttpResponse
     
-from base.models import Room
+from base.models import Room, Topic
 from .forms import RoomForm
+from django.db.models import Q
 
 # Create your views here.
 
@@ -13,16 +14,25 @@ from .forms import RoomForm
 #     {'id' : 3, 'name' : 'Lets learn aws!'},
 # ]
 
-def home(req):
+def home(request):
     # return HttpResponse("Welcome To Home")
     
-    rooms = Room.objects.all()
-    print(type(rooms))
-    print(rooms)
-    context = {'rooms' : rooms}
-    return render(req, 'base/home.html', context)
+    rooms = []
+    topic = request.GET.get("topic") if request.GET.get('topic') != None else ''
+    
+    rooms = Room.objects.filter(
+        Q(topic__name__icontains = topic) |
+        Q(name__icontains = topic) |
+        Q(description__icontains = topic)
+    )
+    
+    topics = Topic.objects.all()
+    
+    context = {'rooms' : rooms, 'topics' : topics, 'room_count' : len(rooms)}
+    
+    return render(request, 'base/home.html', context)
 
-def room(req, id : str):
+def room(request, id : str):
     # room = None
     
     # for r in rooms:
@@ -32,7 +42,7 @@ def room(req, id : str):
     room = Room.objects.get(id = id)
             
     context = {'room' : room}
-    return render(req, 'base/room.html', context)
+    return render(request, 'base/room.html', context)
 
 
 def create_room(request):
