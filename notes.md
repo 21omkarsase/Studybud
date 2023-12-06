@@ -39,3 +39,7 @@
 ### Create admin dashboard user
 
     python manage.py createsuperuser
+
+# Modal form
+
+    class based representation
