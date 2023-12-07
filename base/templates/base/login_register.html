@@ -1,17 +1,32 @@
-{% extends 'main.html' %} {% block content %}
-
+{% extends 'main.html' %} {% block content %} {% if page == 'login' %}
 <div>
-  <form action="" method="POST">
-    {% csrf_token %}
+  <div>
+    <form action="" method="POST">
+      {% csrf_token %} {{form.as_p}}
+      <label for="username">Username</label>
+      <input type="text" name="username" placeholder="Enter Username" />
 
-    <label for="username">Username</label>
-    <input type="text" name="username" placeholder="Enter Username" />
+      <label for="password">Password</label>
+      <input type="password" name="password" placeholder="Enter Password" />
 
-    <label for="password">Password</label>
-    <input type="password" name="password" placeholder="Enter Password" />
+      <input type="submit" value="Login" />
+      <span>
+        New to StudyBud
+        <a href="{% url 'register' %}">Sign Up</a>
+      </span>
+    </form>
+  </div>
+  {% else %}
+  <div>
+    <form method="post">
+      {% csrf_token %} {{form.as_p}}
+      <input type="submit" value="Sign Up" />
+    </form>
 
-    <input type="submit" value="Login" />
-  </form>
+    <span>
+      Already have an account ?
+      <a href="{% url 'login' %}">Login</a>
+    </span>
+  </div>
 </div>
-
-{% endblock content %}
+{% endif %} {% endblock content %}
