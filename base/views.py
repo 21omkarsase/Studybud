@@ -43,6 +43,10 @@ def user_login(request):
     
     return render(request, 'base/login_register.html', context)
 
+def user_logout(request):
+    logout(request)
+    return redirect("home")
+
 def home(request):
     # return HttpResponse("Welcome To Home")
     
