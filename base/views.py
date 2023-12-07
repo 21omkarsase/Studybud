@@ -4,6 +4,9 @@ from django.shortcuts import render, redirect
 from base.models import Room, Topic
 from .forms import RoomForm
 from django.db.models import Q
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 
@@ -14,10 +17,35 @@ from django.db.models import Q
 #     {'id' : 3, 'name' : 'Lets learn aws!'},
 # ]
 
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        print(username, password)
+        
+        try:
+            user = User.objects.get(username = username)
+        except:
+            messages.error(request, "User does not exist")
+            return redirect("login")
+        
+        user = authenticate(request, username = username, password = password)
+        
+        if user is not None:
+            login(request, user)
+            return redirect("home")
+        else:
+            messages.error(request, "Invalid Credentials")
+            return redirect("login")
+    
+    context = {}
+    
+    return render(request, 'base/login_register.html', context)
+
 def home(request):
     # return HttpResponse("Welcome To Home")
     
-    rooms = []
     topic = request.GET.get("topic") if request.GET.get('topic') != None else ''
     
     rooms = Room.objects.filter(
@@ -27,7 +55,6 @@ def home(request):
     )
     
     topics = Topic.objects.all()
-    
     context = {'rooms' : rooms, 'topics' : topics, 'room_count' : len(rooms)}
     
     return render(request, 'base/home.html', context)
@@ -62,7 +89,6 @@ def create_room(request):
 def update_room(request, room_id):
     room = Room.objects.get(id = room_id)
     form = RoomForm(instance = room)
-    print("first", form)
     
     if request.method == 'POST':
         form = RoomForm(request.POST, instance = room)
@@ -85,22 +111,4 @@ def delete_room(request, room_id):
    
     context = {'obj' : room}
     
-    return render(request, 'base/delete.html', context)    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return render(request, 'base/delete.html', context)  
