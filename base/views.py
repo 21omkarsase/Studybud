@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 # from django.http import HttpResponse
     
-from base.models import Room, Topic
+from base.models import Room, Topic, Message
 from .forms import RoomForm
 from django.db.models import Q
 from django.contrib.auth.models import User
@@ -94,16 +94,26 @@ def home(request):
     
     return render(request, 'base/home.html', context)
 
-def room(request, id : str):
+def room(request, room_id : str):
     # room = None
     
     # for r in rooms:
     #     if r["id"] == int(id):
     #         room = r
     
-    room = Room.objects.get(id = id)
+    room = Room.objects.get(id = room_id)
+    room_messages = room.message_set.all().order_by('-created')
+    participants = room.participants.all()
+    
+    if request.method == 'POST':
+        room_message = Message(user = request.user, room = room, body = request.POST.get('body'))
+        room_message.save()
+        
+        room.participants.add(request.user)
+        
+        return redirect('room', room_id = room.id)
             
-    context = {'room' : room}
+    context = {'room' : room, 'room_messages' : room_messages, 'participants' : participants}
     return render(request, 'base/room.html', context)
 
 
@@ -150,3 +160,18 @@ def delete_room(request, room_id):
     context = {'obj' : room}
     
     return render(request, 'base/delete.html', context)  
+
+
+def delete_message(request, message_id):
+    message = Message.objects.get(id = message_id)
+    
+    if request.user != message.user:
+        messages.error(request, "Only the room owner can delete a message")
+        return redirect("room", room_id = message.room.id)
+
+    if request.method == 'POST':
+        message.delete()
+        return redirect("room", room_id = message.room.id)
+    
+    return render(request, 'base/delete.html', {'obj' : message})
+    
