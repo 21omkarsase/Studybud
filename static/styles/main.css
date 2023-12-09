@@ -1,0 +1,31 @@
+.home-container,
+.profile-page {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.font-md {
+    font-size: 21px;
+}
+
+.main-area {
+    display: flex;
+    justify-content: space-between;
+}
+
+.topics {
+    width: 10%;
+}
+
+.room-section {
+    width: 60%;
+}
+
+.activity-feed {
+    width: 20%;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 35px;
+}
