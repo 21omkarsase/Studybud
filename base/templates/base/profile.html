@@ -1,5 +1,47 @@
 {% extends 'main.html' %} {% block content %}
 
-<h1>{{user.username}}</h1>
+<style>
+  .profile-page {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .font-md {
+    font-size: 21px;
+  }
+
+  .main-area {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .topics {
+    width: 10%;
+  }
+
+  .room-section {
+    width: 60%;
+  }
+
+  .activity-feed {
+    width: 20%;
+  }
+
+  .page-title {
+    text-align: center;
+    font-size: 35px;
+  }
+</style>
+
+<div class="profile-page">
+  <h1>{{user.username}}</h1>
+  <div class="main-area">
+    <div class="topics">{% include 'base/topics_component.html' %}</div>
+    <div class="room-section">{% include 'base/feed_component.html' %}</div>
+    <div class="activity-feed">
+      {% include 'base/activity_component.html' %}
+    </div>
+  </div>
+</div>
 
 {% endblock content %}
