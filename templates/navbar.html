@@ -1,15 +1,30 @@
+<style>
+  .main-nav {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    gap: 10px;
+  }
+
+  .font-md {
+    font-size: 21px;
+  }
+</style>
+
 <div class="navbar">
-  <a href="/">Home</a>
-  <a href="/room">Room</a>
+  <div class="main-nav">
+    <a class="font-md" href="/">Home</a>
+    <a class="font-md" href="/room">Room</a>
 
-  <form action="" action="{% url 'home' %}">
-    <input type="text" name="topic" placeholder="Search Rooms..." />
-  </form>
+    <form action="" action="{% url 'home' %}">
+      <input type="text" name="topic" placeholder="Search Rooms..." />
+    </form>
 
-  {% if request.user.is_authenticated %}
-  <a href="{% url 'logout' %}"> Logout</a>
-  {% else %}
-  <a href="{% url 'login' %}">Login</a>
-  {% endif %}
+    {% if request.user.is_authenticated %}
+    <a class="font-md" href="{% url 'logout' %}"> Logout</a>
+    {% else %}
+    <a class="font-md" href="{% url 'login' %}">Login</a>
+    {% endif %}
+  </div>
 </div>
 <hr />

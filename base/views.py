@@ -90,7 +90,9 @@ def home(request):
     )
     
     topics = Topic.objects.all()
-    context = {'rooms' : rooms, 'topics' : topics, 'room_count' : len(rooms)}
+    room_messages = Message.objects.filter(Q(room__topic__name__icontains = topic))
+    
+    context = {'rooms' : rooms, 'topics' : topics, 'room_count' : len(rooms), 'room_messages' : room_messages}
     
     return render(request, 'base/home.html', context)
 
@@ -102,7 +104,7 @@ def room(request, room_id : str):
     #         room = r
     
     room = Room.objects.get(id = room_id)
-    room_messages = room.message_set.all().order_by('-created')
+    room_messages = room.message_set.all()
     participants = room.participants.all()
     
     if request.method == 'POST':

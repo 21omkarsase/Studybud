@@ -1,0 +1,13 @@
+<h3 class="font-md">Browse Topics</h3>
+<hr />
+
+<div>
+  <a class="font-md" href="{% url 'home' %}">All</a>
+</div>
+{% for topic in topics %}
+<div>
+  <a class="font-md" href="{% url 'home'%}?topic={{topic.name}} "
+    >{{topic.name}}</a
+  >
+</div>
+{% endfor %}

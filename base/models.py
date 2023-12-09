@@ -26,6 +26,9 @@ class Room(models.Model):
     
 
 class Message(models.Model):
+    class Meta:
+        ordering = ['-updated', '-created']
+        
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     room = models.ForeignKey(Room, on_delete = models.CASCADE)
     body = models.TextField()
