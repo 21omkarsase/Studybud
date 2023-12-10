@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 # from django.http import HttpResponse
     
 from base.models import Room, Topic, Message
-from .forms import RoomForm
+from .forms import RoomForm, UserForm
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -28,8 +28,6 @@ def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('username').lower()
         password = request.POST.get('password')
-        
-        print(username, password)
         
         try:
             user = User.objects.get(username = username)
@@ -136,6 +134,7 @@ def create_room(request):
     
     if request.method == 'POST':
         form = RoomForm(request.POST)
+        
         if form.is_valid():
             room = form.save(commit = False)
             room.host = request.user
@@ -156,7 +155,6 @@ def update_room(request, room_id):
     
     if request.method == 'POST':
         form = RoomForm(request.POST, instance = room)
-        print("first", form)
         
         if form.is_valid():
             form.save()
@@ -178,7 +176,7 @@ def delete_room(request, room_id):
     
     return render(request, 'base/delete.html', context)  
 
-
+@login_required(login_url = 'login')
 def delete_message(request, message_id):
     message = Message.objects.get(id = message_id)
     
@@ -192,3 +190,19 @@ def delete_message(request, message_id):
     
     return render(request, 'base/delete.html', {'obj' : message})
     
+
+@login_required(login_url = 'login')
+def update_user(request):
+    user = request.user 
+    form = UserForm(instance = user)
+    
+    if request.method == 'POST':
+        print(request.POST)
+        form = UserForm(request.POST, request.FILES, instance = user)
+        
+        if form.is_valid():
+            form.save()
+            
+        return redirect('user-profile', user_id = user.id)
+    
+    return render(request, 'base/update_user.html', {'form' : form})
