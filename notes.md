@@ -40,6 +40,10 @@
 
     python manage.py createsuperuser
 
-# Modal form
+### Modal form
 
     class based representation
+
+### Install Django-Rest Framework
+
+    pip install djangorestframework (add in installed apps :     'rest_framework')

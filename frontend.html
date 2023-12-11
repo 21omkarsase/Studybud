@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test</title>
+  </head>
+  <body>
+    <div class="room-section">
+      <h1>Available Rooms</h1>
+
+      <div id="rooms"></div>
+    </div>
+
+    <script>
+      const roomDocument = document.querySelector("#rooms");
+      let rooms_html = "";
+
+      const fetchRooms = async () => {
+        try {
+          const response = await fetch("http://127.0.0.1:8000/api/rooms");
+          const rooms = await response.json();
+          console.log(rooms[0]);
+
+          for (let idx = 0; idx < rooms.length; idx++) {
+            console.log(rooms[idx]);
+            rooms_html += `
+            <div class = 'room'>
+                <h2>Room Name : ${rooms[idx].name}</h2>
+                <h3>Total Participants : ${rooms[idx].participants.length}</h3>
+            </div>
+            `;
+          }
+
+          roomDocument.innerHTML = rooms_html;
+        } catch (error) {
+          console.log("error : ", error);
+        }
+      };
+
+      fetchRooms();
+    </script>
+  </body>
+</html>
